@@ -10,7 +10,6 @@ function getData(){
     	type : "GET",
 		url : "/map/getMapData",
 		success : function(result) {
-			//localStorage.setItem("addrs", result);
 			let jsonArr = JSON.parse(result);
 			//console.log(jsonArr);
 			loadMap(jsonArr);
@@ -54,15 +53,20 @@ function loadMap(jsonArr){
 	}
 	//console.log(poitersMap);
 	for (let i = 0; i < conections.length; i++) {
-		let value = visitorsByAddr.get(conections[i].remoteAddr);
-		value.push(conections[i].name);
-		//console.log("add name="+value);
-		visitorsByAddr.set(conections[i].remoteAddr, value);
+		if(visitorsByAddr.has(conections[i].remoteAddr)){
+			let value = visitorsByAddr.get(conections[i].remoteAddr);
+			//console.log(conections[i].name);
+			if(conections[i].name !== undefined){
+				value.push(conections[i].name);
+			}
+			visitorsByAddr.set(conections[i].remoteAddr, value);
+		}
 	}
 	//console.log(visitorsByAddr);
 	
 	let maxVist = 0;
 	let maxAddr = 0;
+	
 	for (let [key, value] of visitorsByAddr) {
 		if(value.length > maxVist){
 			maxVist = value.length;

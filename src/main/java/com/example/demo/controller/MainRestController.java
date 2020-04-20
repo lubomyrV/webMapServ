@@ -1,66 +1,53 @@
 package com.example.demo.controller;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.demo.database.Sqlite;
 
 @RestController
 public class MainRestController {
 	
+	@Autowired Sqlite database;
+	
 	@GetMapping("/map/getMapData")
 	public String getMapData() {
-		//System.out.println("getMapData");
-		MainCtrl mcrtl = new MainCtrl();
-		List<JSONObject> sjsonList = mcrtl.jsonLogReader();
 		
-		String path = System.getProperty("user.dir") + File.separator +"addrsInfo.json";
-		String everything = "";		
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(path));
-		} catch (FileNotFoundException e) {
-			System.err.println("FileNotFoundException "+e.getMessage());
-		}
-		try {
-		    StringBuilder sb = new StringBuilder();
-		    String line = null;
-			try {
-				line = br.readLine();
-			} catch (IOException e) {
-				System.err.println("IOException readLine "+e.getMessage());
-			}
-
-		    while (line != null) {
-		        sb.append(line);
-		        sb.append(System.lineSeparator());
-		        try {
-					line = br.readLine();
-				} catch (IOException e) {
-					System.err.println("IOException append "+e.getMessage());
+		List<JSONObject> jsonObjects = database.getAllClients();
+		List<JSONObject> clients = new ArrayList<>();
+		for (Object object : jsonObjects) {
+			JSONObject obj = (JSONObject) object;
+			JSONObject newJobject = new JSONObject();
+			newJobject.put("remoteAddr", obj.get("remoteAddr"));
+			newJobject.put("utcTime", obj.get("utcTime"));
+			newJobject.put("utcTime", obj.get("utcTime"));
+			if(obj.has("query")) {
+				String query = (String) obj.get("query");
+				if(query.contains("name")) {
+					String name = query.substring(5);
+					newJobject.put("name", name);
 				}
-		    }
-		    everything = sb.toString();
-		} finally {
-		    try {
-				br.close();
-			} catch (IOException e) {
-				System.err.println("IOException close "+e.getMessage());
+			} else if(obj.has("upgrade-insecure-requests")){
+				String uir = (String)obj.get("upgrade-insecure-requests");
+				if(uir.equalsIgnoreCase("1")) {
+					newJobject.put("name", "annonim");						
+				}
 			}
+			if(!newJobject.has("name")) {
+				newJobject.put("name", "bot");
+			}
+			clients.add(newJobject);
 		}
 		
+		List<JSONObject> locations = database.getAllLocation();
 		
-		everything += "{}]";
-		//System.out.println("everything="+everything.length());
 		List<String> jsons = new ArrayList<>();
-		jsons.add(everything);
-		jsons.add(sjsonList.toString());
+		jsons.add(locations.toString());
+		jsons.add(clients.toString());
+		
 	    return jsons.toString();
 	}
 	
