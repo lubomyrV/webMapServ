@@ -24,20 +24,15 @@ public class MainRestController {
 			newJobject.put("remoteAddr", obj.get("remoteAddr"));
 			newJobject.put("utcTime", obj.get("utcTime"));
 			newJobject.put("utcTime", obj.get("utcTime"));
-			if(obj.has("query")) {
-				String query = (String) obj.get("query");
-				if(query.contains("name")) {
-					String name = query.substring(5);
-					newJobject.put("name", name);
-				}
-			} else if(obj.has("upgrade-insecure-requests")){
-				String uir = (String)obj.get("upgrade-insecure-requests");
-				if(uir.equalsIgnoreCase("1")) {
-					newJobject.put("name", "annonim");						
-				}
-			}
-			if(!newJobject.has("name")) {
-				newJobject.put("name", "bot");
+			
+			
+			if(obj.has("query") && ((String)obj.get("query")).contains("name")) {
+				String name = ((String) obj.get("query")).substring(5);
+				newJobject.put("name", name);
+			} else if(obj.has("upgrade_insecure_requests") && obj.get("upgrade_insecure_requests").equals("1")) {
+				newJobject.put("name", "annonim");
+			} else {
+				newJobject.put("name", "bot");				
 			}
 			clients.add(newJobject);
 		}

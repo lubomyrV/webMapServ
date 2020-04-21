@@ -52,7 +52,11 @@ function loadMap(jsonArr){
         poitersMap.get(latitude+""+longitude).push(point.ip);
 	}
 	//console.log(poitersMap);
+	let realPeople = 0;
 	for (let i = 0; i < conections.length; i++) {
+		if(conections[i].name !== "bot"){
+			realPeople++;
+		}
 		if(visitorsByAddr.has(conections[i].remoteAddr)){
 			let value = visitorsByAddr.get(conections[i].remoteAddr);
 			//console.log(conections[i].name);
@@ -79,8 +83,11 @@ function loadMap(jsonArr){
 	for (var i = 0; i < addrs.length; i++) {
 		if(addrs[i].ip == maxAddr){
 			document.getElementById("maxFreq").innerHTML = 
-				"All unique visits : "+allVisits+"<br/>"
-				+"Max visits : "+maxVist+", from  "+addrs[i].country_name+", "
+				"All visits : " + conections.length + "<br/>"
+				+ "People : "+realPeople+"<br/>"
+				+ "Bots : "+(allVisits - realPeople)+"<br/>"
+				+ "Unique visits : "+allVisits+"<br/>"
+				+ "Max visits : "+maxVist+", from  "+addrs[i].country_name+", "
 				+addrs[i].state_prov+", "
 				+addrs[i].district+", "
 				+addrs[i].city+" (isp : "+addrs[i].isp+")";
