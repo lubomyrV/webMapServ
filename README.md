@@ -1,9 +1,9 @@
 # webMapServ
-A simple web app that displays visitor’s geolocation on a map of the world (OpenStreetMap). 
+A web app that displays visitors geolocation on a map of the world (OpenStreetMap). 
 
 Written on Java with Spring Boot framework, API integration for IP addresses location, and SQLite as a database.
 
-Following tools is needed:
+Following tools are needed:
 
 1) JRE,JDK v.8
 
