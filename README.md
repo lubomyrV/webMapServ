@@ -24,3 +24,9 @@ In order to run the app, go to `target/` and type
 `$ java -jar demo-0.0.1-SNAPSHOT.jar`
 
 The app automatically creates a database called `test.db`
+
+If a user visit `http://localhost:8080/username` it saves all data with `username` into the database, otherwise as `anonymous`, for others visits that seems not a real people the data saves as `bot`.
+
+In order to take a lock visitors go to `http://localhost:8080/map`
+
+![example](https://github.com/lubomyrV/webMapServ/blob/master/map1.png)
