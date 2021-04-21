@@ -29,4 +29,4 @@ If a user visits `http://localhost:8080/?name=username` it saves all data with `
 
 In order to see the map with all visitors open this link `http://localhost:8080/map`
 
-![example](https://github.com/lubomyrV/webMapServ/blob/master/map2.png)
+![example](https://github.com/lubomyrV/webMapServ/blob/master/map3.png)
