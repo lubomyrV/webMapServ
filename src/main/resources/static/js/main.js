@@ -12,7 +12,9 @@ function getData(){
 		success : function(result) {
 			let jsonArr = JSON.parse(result);
 			//console.log(jsonArr);
+			
 			loadMap(jsonArr);
+			localStorage.setItem("allData", JSON.stringify(jsonArr));
 		},
 		error : function(e) {
 			console.err("getData err: ", e);
@@ -20,9 +22,46 @@ function getData(){
     });
 }
 
-function loadMap(jsonArr){
-	var mymap = L.map('mapid').setView([50.505, 30.09], 5);
+function searchByName() {
+	let searchNameElement = document.getElementById("searchNameId");
+	let selectedName = searchNameElement.value;
+	let allData = JSON.parse(localStorage.getItem("allData"));
+	if (selectedName.length > 2) {
+		//console.log(selectedName);
+		let addrs = allData[0];
+		let users = allData[1];
+		let usersSize = users.length;
+		let remoteAddrSet = new Set()
+		let selectedUsers = [];
+		for(let i = 0; i < usersSize; ++i){
+			let user = users[i];
+			if (user.name.includes(selectedName)){
+				remoteAddrSet.add(user.remoteAddr);
+				selectedUsers.push(user);
+			}
+		}
+		
+		let selectedAddrs = [];
+		for(let i = 0; i < addrs.length; ++i){
+			if (remoteAddrSet.has(addrs[i].ip)){
+				selectedAddrs.push(addrs[i]);
+			}
+		}
+		//console.log(selectedAddrs);
+		//console.log(selectedUsers);
+		
+		let newData = [];
+		newData.push(selectedAddrs);
+		newData.push(selectedUsers);
+		loadMap(newData);
+	} else {
+		loadMap(allData);
+	}
+}
 
+function loadMap(jsonArr){
+	document.getElementById('containerId').innerHTML = '<div id="mapid" style="width: 1400px; height: 600px;"></div>';
+	let mymap = L.map('mapid').setView([50.505, 30.09], 5);
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
