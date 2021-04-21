@@ -25,7 +25,7 @@ In order to run the app, go to `target/` and type
 
 The app automatically creates a database called `test.db`
 
-If a user visit `http://localhost:8080/username` it saves all data with `username` into the database, otherwise as `anonymous`, for others visits that seems not a real people the data saves as `bot`.
+If a user visit `http://localhost:8080/?name=username` it saves all data with `username` into the database, otherwise as `anonymous` with `http://localhost:8080/` link, for others visits that seems not a real people the data saves as `bot`.
 
 In order to see the map with all visitors go to `http://localhost:8080/map`
 
