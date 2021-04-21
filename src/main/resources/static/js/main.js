@@ -80,12 +80,14 @@ function loadMap(jsonArr){
 	let allVisits = visitorsByAddr.size;
 	//console.log(maxAddr + ' = ' + maxVist);
 	//console.log(' allVisits ' + allVisits);
+	let botCounter = allVisits - realPeople;
+	if (botCounter < 0 ) botCounter = 0;
 	for (var i = 0; i < addrs.length; i++) {
 		if(addrs[i].ip == maxAddr){
 			document.getElementById("maxFreq").innerHTML = 
 				"All visits : " + conections.length + "<br/>"
 				+ "People : "+realPeople+"<br/>"
-				+ "Bots : "+(allVisits - realPeople)+"<br/>"
+				+ "Bots : "+botCounter+"<br/>"
 				+ "Unique visits : "+allVisits+"<br/>"
 				+ "Max visits : "+maxVist+", from  "+addrs[i].country_name+", "
 				+addrs[i].state_prov+", "
